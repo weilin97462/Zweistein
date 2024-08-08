@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include"pdf_cdf.h"
 
 double DTC_pdf[15625][20];
 double DTC_cdf[15625][20];
@@ -26,7 +27,7 @@ void decode_id(int board_id,int dist[])
 }
 void right_shift(double pdf[])
 {
-    for(int i=20;i>0;i--)
+    for(int i=19;i>0;i--)
     {
         pdf[i]=pdf[i-1];
     }
@@ -53,14 +54,16 @@ double* tree_serach(int board_id)
     // decode the id to distance array
     decode_id(board_id,dist);
     double pdf_sum[20]={};
+    // run through each dice value
     for (int dice=0;dice<6;dice++)
     {
-        // find steps
         // piece with dice number is alive
         if(dist[dice]>1)
         {
+            // do move here
             memcpy(dist_copy,dist,sizeof(dist));
             dist_copy[dice]--;
+            // then search the child
             double pdf_child[20];
             memcpy(pdf_child,tree_serach(encode_id(dist_copy)),sizeof(pdf_child));
             right_shift(pdf_child);
@@ -85,8 +88,10 @@ double* tree_serach(int board_id)
             {
                 if(dist[i]>1)
                 {
+                    // do move here
                     memcpy(dist_copy,dist,sizeof(dist));
                     dist_copy[i]--;
+                    // then search the child
                     memcpy(pdf_child[0],tree_serach(encode_id(dist_copy)),sizeof(pdf_child[0]));
                     right_shift(pdf_child[0]);
                     min_exp=calculate_DTC_exp(pdf_child[0]);
@@ -155,10 +160,4 @@ void init()
             DTC_cdf[i][j]=sum;
         }
     }
-}
-
-int main()
-{
-    init();
-
 }
