@@ -12,11 +12,21 @@ int main()
     for(int i=0;i<6;i++)
     {
         int _=scanf("%d",&red_pos[i]);
+        if(red_pos[i]==24)
+        {
+            printf("Red already wins, the win rate of Red in EWN-simple is 1.000000\n");
+            return;
+        }
     }
     printf("enter the position of blue pieces (seperated by space, -1 means captured):\n");
     for(int i=0;i<6;i++)
     {
         int _=scanf("%d",&blue_pos[i]);
+        if(blue_pos[i]==0)
+        {
+            printf("Blue already wins, the win rate of Red in EWN-simple is 0.000000\n");
+            return;
+        }
     }
     printf("Blue moves first, the win rate of Red in EWN-simple is %lf\n",zweistein(red_pos,blue_pos));
 }
